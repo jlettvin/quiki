@@ -190,7 +190,7 @@ window.onload = (function (win, doc) {
 		{ // reload button
 			tagify('br', 'tag', 'put', 'check');
 			tagify (
-				'loud',
+				//'loud',
 				'button', 'tag',
 				'reload', 'text',
 				'location.reload(true)', 'onclick', 'attr',
