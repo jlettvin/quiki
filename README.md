@@ -6,3 +6,4 @@ Customizable client-side wiki markdown
 * img/quiki_tm.png: favicon
 * js/quiki.js: quiki manager
 * js/wiki.js: temporary quiki-to-HTML interpreter
+* fsm/*: Finite State Machine in C++ for conversion to js
