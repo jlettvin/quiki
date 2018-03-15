@@ -22,8 +22,8 @@ window.onload = (function (win, doc) {
 		"attr": function () {
 			var key = oprStack.pop ();
 			var val = oprStack.pop ();
-			var val = tagStack[tagStack.length - 1];
-			val.setAttribute (key, val);
+			var tag = tagStack[tagStack.length - 1];
+			tag.setAttribute (key, val);
 		},
 		"text": function () {
 			var val = tagStack[tagStack.length - 1];
