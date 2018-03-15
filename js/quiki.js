@@ -92,7 +92,8 @@ window.onload = (function (win, doc) {
 
 		for (var i=0, len=children.length; i<len; i++) {
 			if (children[i].nodeType == Node.COMMENT_NODE) {
-				comments.push (trim (children[i].data));
+				var comment = trim (children[i].data);
+				comments.push (comment);
 			}
 		}
 		return comments;
@@ -170,6 +171,7 @@ window.onload = (function (win, doc) {
 		const fmt    = '<hr /><small><small>[{}]</small></small><br />';
 		const md     = 'quiki.markdown:';
 		const len    = md.length;
+		var html     = doc.documentElement;
 		var body     = doc.body;
 		var head     = doc.head;
 		var comments = getComments (body);
