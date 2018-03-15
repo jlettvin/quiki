@@ -337,11 +337,13 @@ document.onload = (function () {
    * other characters are simply used as is in the checkbox.
    */
   var checkBoxes = function (line) {
-        var c = line.substr(1,1);
+        var c = line[1];
         var d;
         if(     c >= '0' && c <= '9') d = c; //$digit[$c];
+	    else if(c=='_') d = "&#x2610;";
         else if(c=='+') d = '<b style="background-color:white; color:#00AA00;">&#x2714;</b>';
         else if(c=='-') d = '<b style="background-color:white; color:red;">&#x2718;</b>';
+	    //else if(c==' ') d = "&#x20de;";
         else            d = c; //""; //"&#x20de;";
         var s = line.substr(2).trim();
         return '<tr><td>'+d+'</td><td style="background-color:white">'+s+'</td></tr>';
