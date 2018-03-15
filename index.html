@@ -8,118 +8,49 @@
     <link type="image/x-icon" href="img/quiki_tm.png" rel="icon" />
 
 <!--quiki.markdown:
-Interpret segments input data then applies service rules to convert.
-In this documentation, typical semantic rules apply:
-    {service} is a variable such as echo, image, or gnuplot.
 
-#= numbered list header
-# `{service}[?[{text}]]`
-##= numbered sublist header
-## `{service}`                      Default characteristics service doc
-## `{service}?`                     Help (the service __doc__ string)
-## `{service}?{reminder text}`      A reminder to add to the markup
-# `{service}.{id}[|{label}|{code}`
-## `{service}.{id}`                 A reference to an identified object
-## `{service}.{id}|{label}|{code}`  An instruction to run a service
 
-*= bullet list header
-* bullet item 1
-** bullet item 1.1
-** bullet item 1.2
-* bullet item 2
-** bullet item 2.1
-** bullet item 2.2
 
-== H2 header ==
-=== H3 header ===
-etc...
 
-== Line breaks ==
+# paragraphs
+# empties
+# subsubsection
+# subsection
+# section
+# !_underline_!
+# !=bold=!
+# !/italic/!
+# !-strike-!
+# ![http://google.com google]!
 
-^^^ Breaks text to a newline (<BR>)
-^^^^ Breaks text to under an object.
-^^^^^ Breaks page.
-___Indent a paragraph
-`   `Indent a paragraph alternate method
+___Indented 3.
+^^^^
+__Indented 2.
+^^^
+Not indented.
+^^newline
 
-== Contents of symbol table ==
-`symboltable`
+Image:
+!{img/quiki_tm.png favicon}!
 
-== Reference Manual ==
-`?`
+Image with URL (TODO):
+!{img/quiki_tm.png https://github.com/jlettvin/quiki}!
 
-"""
+Horizontal line
+_____
 
-ExampleMarkup = """\
-=== image default characteristics: ===
-`image`
+Comment:
+; This text should not appear.
+^^^
+Multiline Comment:
+;[
+Line 1
+Line 2
+;]
+^^^
+!]]Centered[[!
 
-=== image markup construction help: ===
-`image?`
-
-=== image insertion reminder: ===
-`image?Low photon count diffraction pattern`
-
-=== image insertion script: ===
-`image.lpc|Low photon count diffraction pattern|lpc.diffraction.png`
-
-=== image reference: ===
-`image.lpc`
-^^^^^
-=== Boxes: ===
-`box.hw|hw|Hello world`
-
-=== Images: ===
-Try image: `image|img/TriangularMesh.png`
-
-=== Lists: ===
-
-* 1
-** 1
-*** 1
-** 2
-* 2
-
-# 1
-## 1
-### 1
-## 2
-# 2
-
-=== More examples: ===
-___Here are two examples of image inclusions made possible
-by application of the xenofile principle.
-The first and third are an ancient Greek theorem.
-The second and fourth are plots.
-`equation.quadratic|the quadratic formula|-b \pm \sqrt{b^2 - 4ac} \over 2a`
-`gnuplot.cos|
-cos(x) and sin(x)|
-{width="256" height="256"}plot cos(x) lw 3,sin(x) lw 3`
-`equation.Euler|Euler's identity|e^{i\pi}+1=0`
-^^^^^
-`gnuplot.Airy|Airy(x,y)|
-{width="256" height="256"}radius(a,x,y)=pi*sqrt((a*x)**2+(a*y)**2);
-wave(a,x,y)=2*besj1(radius(a,x,y))/(radius(a,x,y));
-Airy(a,x,y)=wave(a,x,y)**2;
-cubeAiry(a,x)=10*Airy(a,x,0)*(a*x)**3;
-set xrange[-4.22:4.22]; set yrange[-4.22:4.22]; set zrange[0:1];
-set isosamples 101,101; set pm3d at b; splot Airy(1,x,y);
-`
-=== meta highlighting ===
-___Software engineers use syntax highlighting
-to discriminate between content of different types.
-In Ellipsis we use both intensity and color to mark
-objects apart from content; blocks of information
-that are not part of the paper, but act as a sticky note
-with language usage instructions and reminders the user wishes to place.
-This is meta-data, not part of the actual paper, but useful while writing.
-
-=== other features ===
-___Non-paper, meta-output, will be off-white boxes.
-For instances, defaults are shown in gray,
-reminders are shown in light red,
-service documentation is shown in light cyan,
-and lists of service names are shown in light green.
+!]]Right Aligned]]!
 -->
 
   </head><body></body><!--quiki.js must come after </body>-->

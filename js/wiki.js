@@ -174,35 +174,43 @@ document.onload = (function () {
         '![http://lettvin.com]!',
         '<a href="http://lettvin.com"></a>']
 
+    // horizontal line
+    // _______________
+    ,11 : ['horizontal rule',
+          /^\s*____+\s*$/gim,
+          '\n<hr />\n',
+          'above\n____\nbelow',
+          'above\n<hr />\nbelow']
+
     // ___Indent 3 spaces.
-    ,11 : ['indent 3',
+    ,12 : ['indent 3',
           /^___/gim,
           '&nbsp;&nbsp;&nbsp;',
           '___Indent paragraph.',
           '&nbsp;&nbsp;&nbsp;Indent paragraph.']
 
     // ___Indent 2 spaces.
-    ,12 : ['indent 2',
+    ,13 : ['indent 2',
           /^__/gim,
           '&nbsp;&nbsp;',
           '__Indent paragraph.',
           '&nbsp;&nbsp;Indent paragraph.']
 
-    ,13 : ['paragraph',
+    ,14 : ['paragraph',
           /\^\^\^\^+/gim,
           '<p></p>\n',
           'hello^^^^world',
           'hello<p></p>\nworld']
 
     // ^^^newline past object
-    ,14 : ['newline past',
+    ,15 : ['newline past',
           /\^\^\^/gim,
           '<br clear="all" \/>',
           'Break^^^line',
           'Break<br clear="all" />line']
 
     // ^^newline
-    ,15 : ['newline',
+    ,16 : ['newline',
           /\^\^/gim,
           '<br \/>',
           'Break^^line',
@@ -210,7 +218,7 @@ document.onload = (function () {
 
     // image with reference URL and caption
     // ![http://localhost:8000/background.png+An icon]!  (FIX)
-    ,16 : ['image(url+caption)',
+    ,17 : ['image(url+caption)',
           /!\{\s*(http[s]?:\/\/)(\S+)\s+\s*(http[s]?:\/\/)(\S+)\s+(.*)\s*\}!/gim,
           '<a href="$3$4"><figure>' +
           '<img src="$1$2" width="90" height="90"><\/img>' +
@@ -221,7 +229,7 @@ document.onload = (function () {
 
     // image with caption
     // ![http://localhost:8000/background.png+An icon]!  (FIX)
-    ,17 : ['image(caption)',
+    ,18 : ['image(caption)',
           /!\{\s*(http[s]?:\/\/)?(\S+)\s*(.*)\s*\}!/gim,
           '<figure>' +
           '<img src="$1$2" width="90" height="90"><\/img>' +
@@ -229,14 +237,6 @@ document.onload = (function () {
           '<\/figure>',
           'TODO',
           'TODO']
-
-    // horizontal line
-    // ---------------
-    ,18 : ['horizontal rule',
-          /^\s*---+\s*$/gim,
-          '\n<hr />\n',
-          'above\n---\nbelow',
-          'above\n<hr />\nbelow']
 
     // ; comment
     ,19 : ['comment',
