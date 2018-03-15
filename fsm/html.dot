@@ -1,0 +1,268 @@
+digraph G {
+	rankdir=TB;
+	fontsize=30;
+
+	edge[fontsize=20, fontcolor=red];
+	node[fontsize=20, fontcolor=blue];
+
+	label="html.plus.grammar";
+	labelloc=top;
+	labeljust=center;
+
+    subgraph cluster_main
+    {
+        label="terminals";
+	    START [shape=box, fontsize=30, fontcolor=green];
+	    STOP [shape=box, fontsize=30, fontcolor=green];
+    }
+
+    subgraph cluster_segment
+    {
+        label="segment";
+        S1_root;
+        tag_Open;
+        tag_Slash;
+    }
+            S7_STAGK;
+            S9_STAGX;
+            S10_STAGP;
+            S29_SSCC2;
+
+    subgraph cluster_tag
+    {
+        label="tag";
+
+        /* Note: "script" is removed from tagname for special treatment */
+        tag_Names [shape=egg, label=
+"tag_Names" +
+"\n" +
+"a abbr acronym address applet area article aside audio" +
+"\n" +
+"b base basefont bdi bdo bgsound big blink blockquote body br button" +
+"\n" +
+"canvas caption center cite code col colgroup command content" +
+"\n" +
+"data datalist dd del details dfn dialog dir div dl dt" +
+" " +
+"element em embed" +
+"\n" +
+"fieldset figcaption figure font footer form frame frameset" +
+"\n" +
+"h1 h2 h3 h4 h5 h6 head header hgroup hr html" +
+" " +
+"i iframe image img input ins isindex" +
+"\n" +
+"kbd keygen" +
+" " +
+"label legend li link listing" +
+" " +
+"main map mark marquee menu menuitem meta meter multicol" +
+"\n" +
+"nav nextid nobr noembed noframes noscript" +
+" " +
+"object ol optgroup option output" +
+"\n" +
+"p param picture plaintext pre progress" +
+" " +
+"q" +
+" " +
+"rp rt rtc ruby" +
+"\n" +
+"s samp section select shadow slot small source" +
+" " +
+"spacer span strike strong style sub summary sup" +
+"\n" +
+"table tbody td template textarea tfoot th thead time title tr track tt" +
+" " +
+"u ul" +
+" " +
+"var video" +
+" " +
+"wbr" +
+" " +
+"xmp"
+        ];
+
+        tag_Name;
+        tag_White;
+
+        subgraph cluster_name
+        {
+            label="name";
+            tag_Names;
+        }
+
+        script_Close_o;
+        script_Close_e;
+
+        subgraph cluster_script
+        {
+            label="script";
+
+            script_Text;
+
+            subgraph cluster_script_Open
+            {
+                label="script open";
+                script_Open_S;
+                script_Open_C;
+                script_Open_R;
+                script_Open_I;
+                script_Open_P;
+                script_Open_T;
+            }
+
+            script_Text;
+
+            subgraph cluster_script_Close
+            {
+                label="script close";
+                script_Close_S;
+                script_Close_C;
+                script_Close_R;
+                script_Close_I;
+                script_Close_P;
+                script_Close_T;
+            }
+        }
+
+        subgraph cluster_id
+        {
+            label="id";
+        }
+
+        subgraph cluster_class
+        {
+            label="class";
+        }
+
+        subgraph cluster_attribute
+        {
+            label="attribute";
+        }
+
+        subgraph cluster_meta
+        {
+            label="meta";
+            tag_Bang;
+            comment1;
+            S13_SCOM2;
+            S14_SCOM3;
+            doctype1;
+            S8_SCOM5;
+        }
+    }
+
+    // RULE LINES:
+    // {token} -> {token}[label="{digit}+\. {rule spec}];
+
+    //subgraph cluster_unsorted
+    //{
+        tag_Open -> tag_Names;  // Note: tag_Names has special handling
+        tag_Names -> tag_Slash; // Likewise, no edge data for end-of-name
+
+        // Exercise care:  Later rules overwrite earlier rules where they overlap.
+        // DO NOT move rule lines around without accounting for this.
+
+        // segment data is handled by root
+        // Review: simplify? to S1_root -> S1_root[label="0. every - \"<\""];
+        S1_root -> S1_root[label="0. dark  - \"<\""];
+        S1_root -> S1_root[label="1. white"];
+        S1_root -> tag_Open[label="2. \"<\""];
+
+        tag_Open -> tag_Slash[label="3. \"/\""];
+
+        tag_Open -> tag_Bang[label="4. \"!\""];
+
+        tag_Open -> tag_Name[label="5. alpha [mark]"];
+        tag_Name -> tag_Name[label="6. alnum + \".\""];
+        tag_Name -> tag_White[label="7. white [push]"];
+        tag_Name -> S1_root[label="8. \">\" [push]"];
+
+        tag_Name -> S7_STAGK[label="9. \"/\" [push]"];
+        tag_White -> tag_White[label="10. white"];
+        tag_White -> S1_root[label="11. \">\""];
+        tag_White -> S7_STAGK[label="12. \"/\""];
+        tag_White -> S8_SCOM5[label="13. dark - \"/>\" [mark]"];
+        tag_Slash -> S9_STAGX[label="14. alpha [mark]"];
+        S9_STAGX -> S9_STAGX[label="15. alnum"];
+        S9_STAGX -> S10_STAGP[label="16. white [pop]"];
+        S9_STAGX -> S1_root[label="17. \">\" [pop]"];
+        S10_STAGP -> S1_root[label="18. \">\""];
+        S10_STAGP -> S10_STAGP[label="19. every - \">\""];
+        S7_STAGK -> S1_root[label="20. \">\" [popl]"];
+        tag_Bang -> comment1[label="21. \"-\""];
+        tag_Bang -> doctype1[label="22. \"Dd\""];
+        comment1 -> S13_SCOM2[label="23. \"-\""];
+        S13_SCOM2 -> S13_SCOM2[label="24. every - \"-\""];
+        S13_SCOM2 -> S14_SCOM3[label="25. \"-\""];
+        S14_SCOM3 -> doctype1[label="26. \"-\""];
+        doctype1 -> S8_SCOM5[label="27. every - \">\""];
+        doctype1 -> S1_root[label="28. \">\""];
+        S8_SCOM5 -> tag_White[label="29. white"];
+        S8_SCOM5 -> S1_root[label="30. \">\""];
+        S8_SCOM5 -> S15_SATTR[label="31. dark  - \"/>\""];
+        S8_SCOM5 -> S7_STAGK[label="32. \"/\""];
+        S15_SATTR -> S1_root[label="33. \">\" [akey]"];
+        S15_SATTR -> S7_STAGK[label="34. \"/\" [akey]"];
+        S15_SATTR -> S16_SATTV[label="35. \"=\" [akey]"];
+        S15_SATTR -> tag_White[label="36. white [akey]"];
+        S15_SATTR -> S15_SATTR[label="37. dark - \"=/>\""];
+        S16_SATTV -> S17_SATT2[label="38. \"\\\"\" [mark]"];
+        S16_SATTV -> S18_SATTU[label="39. dark  - \"\\\"\" [mark]"];
+        S17_SATT2 -> S17_SATT2[label="40. every - \"\\\"\\\\\""];
+        S17_SATT2 -> S19_SATTE[label="41. \"\\\\\""];
+        S17_SATT2 -> S20_SATTQ[label="42. \"\\\"\""];
+        S19_SATTE -> S17_SATT2[label="43. every"];
+        S20_SATTQ -> tag_White[label="44. white [aval]"];
+        S20_SATTQ -> S1_root[label="45. \">\" [aval]"];
+        S20_SATTQ -> S7_STAGK[label="46. \"/\" [aval]"];
+        S18_SATTU -> S18_SATTU[label="47. dark - \"/>\""];
+        S18_SATTU -> S1_root[label="48. \">\" [aval]"];
+        S18_SATTU -> S7_STAGK[label="49. \"/\" [aval]"];
+        tag_Open -> tag_Open[label="50. \"<\""];
+        S13_SCOM2 -> S1_root[label="51. \">\""];
+        S14_SCOM3 -> S1_root[label="52. \">\""];
+        tag_Open -> script_Open_S[label="53. \"Ss\" [mark]"];
+        script_Open_S -> tag_Name[label="54. every -   \"Cc\""];
+        script_Open_S -> script_Open_C[label="55. \"Cc\""];
+        script_Open_C -> tag_Name[label="56. every -   \"Rr\""];
+        script_Open_C -> script_Open_R[label="57. \"Rr\""];
+        script_Open_R -> tag_Name[label="58. every -   \"Ii\""];
+        script_Open_R -> script_Open_I[label="59. \"Ii\""];
+        script_Open_I -> tag_Name[label="60. every -   \"Pp\""];
+        script_Open_I -> script_Open_P[label="61. \"Pp\""];
+        script_Open_P -> tag_Name[label="62. every -   \"Tt\""];
+        script_Open_P -> script_Open_T[label="63. \"Tt\""];
+        script_Open_T -> script_Open_T[label="64. every - \">\""];
+        script_Open_T -> script_Text[label="65. \">\" [push]"];
+        script_Text -> script_Text[label="66. every -   \"<\\\\\""];
+        script_Text -> script_Close_o[label="67. \"<\""];
+        script_Text -> S29_SSCC2[label="68. \"\\\\\""];
+        script_Close_o -> script_Text[label="69. every -   \"/\""];
+        script_Close_o -> script_Close_e[label="70. \"/\""];
+        S29_SSCC2 -> script_Text[label="71. every"];
+        S29_SSCC2 -> script_Text[label="72. \"\\\\\""];
+        script_Close_e -> script_Close_o[label="73. every -   \"Ss\""];
+        script_Close_e -> script_Close_S[label="74. \"Ss\" [mark]"];
+        script_Close_S -> script_Close_o[label="75. every -   \"Cc\""];
+        script_Close_S -> script_Close_C[label="76. \"Cc\""];
+        script_Close_C -> script_Close_o[label="77. every -   \"Rr\""];
+        script_Close_C -> script_Close_R[label="78. \"Rr\""];
+        script_Close_R -> script_Close_o[label="79. every -   \"Ii\""];
+        script_Close_R -> script_Close_I[label="80. \"Ii\""];
+        script_Close_I -> script_Close_o[label="81. every -   \"Pp\""];
+        script_Close_I -> script_Close_P[label="82. \"Pp\""];
+        script_Close_P -> script_Close_o[label="83. every -   \"Tt\""];
+        script_Close_P -> script_Close_T[label="84. \"Tt\""];
+        script_Close_T -> script_Close_T[label="85. white"];
+        script_Close_T -> S1_root[label="86. \">\" [pop]"];
+        S1_root -> S37_STEXT[label="87. every -   \"<\" [mark]"];
+        S37_STEXT -> S37_STEXT[label="88. every -   \"<\""];
+        S37_STEXT -> tag_Open[label="89. \"<\" [text]"];
+
+        START -> S1_root[label="BOF"];
+        S1_root -> STOP[label="EOF"];
+    //}
+}
+
