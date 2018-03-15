@@ -7,16 +7,16 @@ window.onload = (function (win, doc) {
 	// Tag production machine
 	var verbose = false;
 	var loud = false;
-	var tagStack = []
+	var tagStack = [doc.body]
 	var oprStack = [];
 
 	// -------------------------------------------------------------------------
-	// example: tagify('kill;p;make;align;center;attr;thrilling;text;take');
+	// example: tagify('p','tag','align','center','attr','msg','text','put');
 	const machine = {
-		"kill": function () {
-			oprStack = [];
+		"clear": function () {
+			oprStack = [doc.body];
 		},
-		"make": function () {
+		"tag": function () {
 			tagStack.push (doc.createElement(oprStack.pop ()));
 		},
 		"attr": function () {
@@ -29,12 +29,20 @@ window.onload = (function (win, doc) {
 			var val = tagStack[tagStack.length - 1];
 			val.innerHTML = oprStack.pop ();
 		},
-		"take": function () {
+		"put": function () {
 			var val = tagStack.pop ();
-			doc.body.appendChild (val);
+			var tgt = tagStack.pop ();
+			tgt.appendChild (val);
+			tagStack.push (tgt);
 		},
 		"loud": function () {
 			loud = !loud;
+		},
+		"check": function () {
+			var ok = (tagStack.length == 1 && tagStack[0] == doc.body);
+			ok || console.log (
+				'stack',
+				(tagStack.length < 1) ? 'underflow' : 'garbage');
 		},
 	}; // machine
 
@@ -138,10 +146,17 @@ window.onload = (function (win, doc) {
 
 	// -------------------------------------------------------------------------
 	var quiki = function () {
-		const fmt = '<hr /><small><small>[{}]</small></small><br />';
+		const fmt   = '<hr /><small><small>[{}]</small></small><br />';
 		var body    = doc.body;
 		var head    = doc.head;
-		var sources = doc.getElementsByClassName ('quiki');
+		var quikis  = doc.getElementsByClassName ('quiki');
+		var sources = [];
+		for (var quiki of quikis) {
+			if (quiki.classList.contains ('markdown')) {
+				console.log (quiki);
+				sources.push (quiki);
+			}
+		}
 
 		grid ('oxx\nooo\noxx')
 
@@ -150,28 +165,28 @@ window.onload = (function (win, doc) {
 			var title    = source.id ? fmt.replace ('{}', source.id) : "";
 			var markdown = source.innerHTML;
 			var content  = doc.jlettvin.wiki.markdown (markdown);
-			tagify ('kill', 'span', 'make', title + content, 'text', 'take');
+			tagify ('span', 'tag', title + content, 'text', 'put', 'check');
 		}
 
 		{ // reload button
 			tagify (
 				'loud',
-				'kill',
-				'button', 'make',
+				'button', 'tag',
 				'reload', 'text',
 				'location.reload(true)', 'onclick', 'attr',
-				'take'
+				'put',
+				'check',
 			);
 		}
 
 		{ // JDL abbr to show tooltip
-			tagify('kill', 'br', 'make', 'take');
+			tagify('br', 'tag', 'put', 'check');
 			tagify (
-				'kill',
-				'abbr', 'make',
+				'abbr', 'tag',
 				'Jonathan D. Lettvin', 'title', 'attr',
 				'JDL', 'text',
-				'take'
+				'put',
+				'check',
 			);
 		}
 	} // quiki
