@@ -174,7 +174,7 @@ window.onload = (function (win, doc) {
 		var html     = doc.documentElement;
 		var body     = doc.body;
 		var head     = doc.head;
-		var comments = getComments (head);
+		var comments = getComments (body);
 
 		for (var comment of comments) {
 			if (comment.substr (0, len) == md) {
