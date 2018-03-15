@@ -10,6 +10,9 @@ window.onload = (function (win, doc) {
 	var tagStack = [doc.body]
 	var oprStack = [];
 
+	if (!Node) { var Node = {}; }
+	if (!Node.COMMENT_NODE) { Node.COMMENT_NODE = 8; /* DOM spec */ }
+
 	// -------------------------------------------------------------------------
 	// example: tagify('p','tag','align','center','attr','msg','text','put');
 	const machine = {
@@ -76,6 +79,24 @@ window.onload = (function (win, doc) {
 			join('\n').
 			normalize('NFC');
 	} // HEREDOC
+
+	// -------------------------------------------------------------------------
+	function trim (str) {
+		return str.replace (/^[ \t\r\n]*/, '').replace (/[ \t\r\n]*$/, '');
+	} // trim
+
+	// -------------------------------------------------------------------------
+	function getComments (element) {
+		var children = element.childNodes;
+		var comments = [];
+
+		for (var i=0, len=children.length; i<len; i++) {
+			if (children[i].nodeType == Node.COMMENT_NODE) {
+				comments.push (trim (children[i].data));
+			}
+		}
+		return comments;
+	} // getComments
 
 	// -------------------------------------------------------------------------
 	var grid = function (pattern) {
@@ -146,29 +167,26 @@ window.onload = (function (win, doc) {
 
 	// -------------------------------------------------------------------------
 	var quiki = function () {
-		const fmt   = '<hr /><small><small>[{}]</small></small><br />';
-		var body    = doc.body;
-		var head    = doc.head;
-		var quikis  = doc.getElementsByClassName ('quiki');
-		var sources = [];
-		for (var quiki of quikis) {
-			if (quiki.classList.contains ('markdown')) {
-				console.log (quiki);
-				sources.push (quiki);
+		const fmt    = '<hr /><small><small>[{}]</small></small><br />';
+		const md     = 'quiki.markdown:';
+		const len    = md.length;
+		var body     = doc.body;
+		var head     = doc.head;
+		var comments = getComments (body);
+
+		for (var comment of comments) {
+			if (comment.substr (0, len) == md) {
+				(loud || verbose) && console.log (
+					'markdown:',
+					'"' + comment + '"');
+				var markdown = trim (comment.substr (15));
+				var content  = doc.jlettvin.wiki.markdown (markdown);
+				tagify ('span', 'tag', content, 'text', 'put', 'check');
 			}
 		}
 
-		grid ('oxx\nooo\noxx')
-
-		// markdown conversion
-		for (var source of sources) {
-			var title    = source.id ? fmt.replace ('{}', source.id) : "";
-			var markdown = source.innerHTML;
-			var content  = doc.jlettvin.wiki.markdown (markdown);
-			tagify ('span', 'tag', title + content, 'text', 'put', 'check');
-		}
-
 		{ // reload button
+			tagify('br', 'tag', 'put', 'check');
 			tagify (
 				'loud',
 				'button', 'tag',
@@ -189,6 +207,14 @@ window.onload = (function (win, doc) {
 				'check',
 			);
 		}
+
+		{
+			var legal = 'Copyright&copy;2018 Jonathan D. Lettvin, All Rights Reserved.';
+			tagify('br', 'tag', 'put', 'check');
+			tagify('small', 'tag', legal, 'text', 'put', 'check');
+
+		}
+
 	} // quiki
 
 	// -------------------------------------------------------------------------
